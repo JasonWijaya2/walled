@@ -1,23 +1,27 @@
 import React from "react";
-import "../../styles/Persona/Persona.css";
 import ProfileImage from "../../assets/profile-image.png";
 
-function Persona() {
+function Persona({ name }) {
+    const firstName = name.split(" ")[0]
+
     return (
-        <div className="persona">
-            <div className="greetings">
-                <div className="title-greetings">Good Morning, Chelsea</div>
-                <div className="subtitle-greetings">
-                    Check all your incoming and outgoing transactions here
+        <div className="container my-4">
+            <div className="row align-items-center">
+                <div className="col-md-8 d-flex align-items-start flex-column">
+                    <h1 className="fw-bold">{`Good Morning, ${firstName}`}</h1>
+                    <p className="text-muted">Check all your incoming and outgoing transactions here</p>
                 </div>
-            </div>
-            <div className="profile">
-                <div className="detail-account">
-                    <div className="account-name">Chelsea Immanuela</div>
-                    <div className="account-type">Personal Account</div>
-                </div>
-                <div className="profile-image">
-                    <img src={ProfileImage} alt="Profile" />
+                <div className="col-md-4 text-end d-flex flex-row gap-3 justify-content-end align-items-center">
+                    <div>
+                        <span className="fw-bold d-block">{name}</span>
+                        <span className="text-muted">Personal Account</span>
+                    </div>
+                    <img
+                        src={ProfileImage}
+                        alt="Profile"
+                        className="rounded-circle mt-2"
+                        style={{ width: "50px", height: "50px", border: "2px solid #007bff" }}
+                    />
                 </div>
             </div>
         </div>

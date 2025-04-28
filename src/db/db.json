@@ -1,0 +1,138 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "chelsea",
+            "password": "password123",
+            "name": "Chelsea Immanuela",
+            "email": "chelsea@example.com"
+        },
+        {
+            "id": 2,
+            "username": "admin",
+            "password": "admin123",
+            "name": "Admin User",
+            "email": "admin@example.com"
+        }
+    ],
+    "user": {
+        "name": "Chelsea Immanuela",
+        "accountNumber": "100899",
+        "balance": 10000000.00,
+        "currency": "Rp"
+    },
+    "transactions": [
+        {
+            "id": 1,
+            "date": "2022-06-30T20:10:00",
+            "type": "Transfer",
+            "from": "Chelsea Immanuela",
+            "to": "Sendy",
+            "description": "Fore Coffee",
+            "amount": -75000.00
+        },
+        {
+            "id": 2,
+            "date": "2022-06-30T20:10:00",
+            "type": "Topup",
+            "from": "Bank Transfer",
+            "to": "Chelsea Immanuela",
+            "description": "Topup from Bank Transfer",
+            "amount": 1000000.00
+        },
+        {
+            "id": 3,
+            "date": "2022-06-30T20:10:00",
+            "type": "Transfer",
+            "from": "Chelsea Immanuela",
+            "to": "Spongebob",
+            "description": "Fore Coffee",
+            "amount": -75000.00
+        },
+        {
+            "id": 4,
+            "date": "2022-06-30T20:10:00",
+            "type": "Topup",
+            "from": "Bank Transfer",
+            "to": "Chelsea Immanuela",
+            "description": "Topup from Bank Transfer",
+            "amount": 1000000.00
+        },
+        {
+            "id": 5,
+            "date": "2022-06-30T20:10:00",
+            "type": "Transfer",
+            "from": "Chelsea Immanuela",
+            "to": "Anwar",
+            "description": "Beli barang",
+            "amount": -75000.00
+        },
+        {
+            "id": 6,
+            "date": "2022-06-30T20:10:00",
+            "type": "Transfer",
+            "from": "Joko",
+            "to": "Chelsea Immanuela",
+            "description": "Transfer",
+            "amount": 1000000.00
+        },
+        {
+            "id": 7,
+            "date": "2022-06-30T20:10:00",
+            "type": "Transfer",
+            "from": "Chelsea Immanuela",
+            "to": "Joko",
+            "description": "Fore Coffee",
+            "amount": -75000.00
+        },
+        {
+            "id": 8,
+            "date": "2022-06-30T20:10:00",
+            "type": "Topup",
+            "from": "Bank Transfer",
+            "to": "Chelsea Immanuela",
+            "description": "Topup from Bank Transfer",
+            "amount": 1000000.00
+        },
+        {
+            "id": 9,
+            "date": "2022-06-30T20:10:00",
+            "type": "Transfer",
+            "from": "Chelsea Immanuela",
+            "to": "Joko",
+            "description": "Fore Coffee",
+            "amount": -75000.00
+        },
+        {
+            "id": 10,
+            "date": "2022-06-30T20:10:00",
+            "type": "Topup",
+            "from": "Bank Transfer",
+            "to": "Chelsea Immanuela",
+            "description": "Topup from Bank Transfer",
+            "amount": 1000000.00
+        }
+    ],
+    "contacts": [
+        {
+            "id": 1,
+            "name": "Sendy",
+            "accountNumber": "200456"
+        },
+        {
+            "id": 2,
+            "name": "Spongebob",
+            "accountNumber": "300789"
+        },
+        {
+            "id": 3,
+            "name": "Anwar",
+            "accountNumber": "400123"
+        },
+        {
+            "id": 4,
+            "name": "Joko",
+            "accountNumber": "500345"
+        }
+    ]
+}

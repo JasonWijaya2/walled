@@ -1,66 +1,198 @@
-import React from "react";
-import "../../styles/Table/Table.css";
+import React, { useState } from "react";
+import useAxios from "../../helpers/useAxios";
 
 function Table() {
-    const transactions = [
-        { date: "20:10 - 30 June 2022", type: "Transfer", fromTo: "Sendy", description: "Fore Coffee", amount: "- 75,000,00" },
-        { date: "20:10 - 30 June 2022", type: "Topup", fromTo: "Bank Transfer", description: "Topup from Bank Transfer", amount: "+ 1.000.000,00" },
-        { date: "20:10 - 30 June 2022", type: "Transfer", fromTo: "Spongebob", description: "Fore Coffee", amount: "- 75,000,00" },
-        { date: "20:10 - 30 June 2022", type: "Topup", fromTo: "Bank Transfer", description: "Topup from Bank Transfer", amount: "+ 1.000.000,00" },
-        { date: "20:10 - 30 June 2022", type: "Transfer", fromTo: "Anwar", description: "Beli barang", amount: "- 75,000,00" },
-        { date: "20:10 - 30 June 2022", type: "Transfer", fromTo: "Joko", description: "Transfer", amount: "+ 1.000.000,00" },
-        { date: "20:10 - 30 June 2022", type: "Transfer", fromTo: "Joko", description: "Fore Coffee", amount: "- 75,000,00" },
-        { date: "20:10 - 30 June 2022", type: "Topup", fromTo: "Bank Transfer", description: "Topup from Bank Transfer", amount: "+ 1.000.000,00" },
-    ];
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filterType, setFilterType] = useState("All");
+    const [sortBy, setSortBy] = useState("date");
+    const [sortDir, setSortDir] = useState("desc");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsCount, setItemsCount] = useState(10);
+    const itemsPerPage = 10;
+
+    const buildQueryString = () => {
+        let query = `?_limit=${itemsCount}`;
+
+        if (searchTerm) {
+            query += `&q=${encodeURIComponent(searchTerm)}`;
+        }
+
+        if (filterType && filterType !== "All") {
+            query += `&type=${filterType}`;
+        }
+
+        if (sortBy) {
+            query += `&_sort=${sortBy}&_order=${sortDir}`;
+        }
+
+        console.log(query);
+
+
+        return query;
+    };
+
+    const [{ loading: getTransactionLoading, data: getTransactionData }] =
+        useAxios(
+            {
+                method: "GET",
+                url: `http://localhost:3000/transactions${buildQueryString()}`,
+            },
+            { manual: false }
+        );
+
+    // Pagination logic
+    const totalPages = Math.ceil(getTransactionData?.length / itemsPerPage);
+    const paginatedTransactions = getTransactionData?.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    // Search logic
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleItemsCountChange = (e) => {
+        setItemsCount(e.target.value)
+        setCurrentPage(1)
+    }
+
+    const handleTypeFilterChange = (e) => {
+        setFilterType(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleSortByChange = (e) => {
+        setSortBy(e.target.value);
+        setCurrentPage(1);
+    }
+
+    const handleSortDirChange = (e) => {
+        setSortDir(e.target.value);
+        setCurrentPage(1);
+    }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     return (
-        <div className="table-container">
-            <div className="table-controls">
-                <input type="text" placeholder="Search" className="search-input" />
-                <div className="dropdowns">
-                    <select className="dropdown">
-                        <option>Last 10 transactions</option>
-                    </select>
-                    <select className="dropdown">
-                        <option>Date</option>
-                    </select>
-                    <select className="dropdown">
-                        <option>Descending</option>
-                    </select>
+        <>
+            {getTransactionData ? (
+                <div className="container my-4">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <input
+                            type="text"
+                            className="form-control w-25"
+                            placeholder="Search"
+                            value={searchTerm}
+                            onChange={handleSearch}
+                        />
+                        <div className="d-flex flex-row gap-4">
+                            <div className="d-flex gap-2 justify-content-center align-items-center">
+                                <label htmlFor="">Show last</label>
+                                <select className="form-select" value={itemsCount} onChange={handleItemsCountChange}>
+                                    <option value="10">10 Transactions</option>
+                                    <option value="5">5 Transactions</option>
+                                    <option value="Topup">Topup</option>
+                                </select>
+                            </div>
+                            <div className="d-flex gap-2 justify-content-center align-items-center">
+                                <label htmlFor="">Type</label>
+                                <select className="form-select" value={filterType} onChange={handleTypeFilterChange}>
+                                    <option value="All">All</option>
+                                    <option value="Transfer">Transfer</option>
+                                    <option value="Topup">Topup</option>
+                                </select>
+                            </div>
+                            <div className="d-flex gap-2 justify-content-center align-items-center">
+                                <label htmlFor="">Sort By</label>
+                                <select className="form-select" value={sortBy} onChange={handleSortByChange}>
+                                    <option value="date">Date</option>
+                                    <option value="amount">Amount</option>
+                                    <option value="type">Type</option>
+                                </select>
+                                <select className="form-select" value={sortDir} onChange={handleSortDirChange}>
+                                    <option value="desc">Desc</option>
+                                    <option value="asc">Asc</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <table className="table table-hover">
+                        <thead className="table-light">
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Type</th>
+                                <th>From / To</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {paginatedTransactions.map((transaction, index) => (
+                                <tr key={index}>
+                                    <td>{transaction.date}</td>
+                                    <td>{transaction.type}</td>
+                                    <td>
+                                        {String(transaction.amount).startsWith("-")
+                                            ? transaction.to
+                                            : ""}
+                                    </td>
+                                    <td>{transaction.description}</td>
+                                    <td
+                                        className={
+                                            String(transaction.amount).startsWith("-")
+                                                ? "text-danger fw-bold"
+                                                : "text-success fw-bold"
+                                        }
+                                    >
+                                        {String(transaction.amount).startsWith("-")
+                                            ? transaction.amount
+                                            : `+${transaction.amount}`}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <div className="d-flex justify-content-end gap-2">
+                        <button
+                            className="btn btn-outline-primary"
+                            disabled={currentPage === 1}
+                            onClick={() => handlePageChange(1)}
+                        >
+                            First
+                        </button>
+                        {[...Array(totalPages)].map((_, index) => (
+                            <button
+                                key={index}
+                                className={`btn ${currentPage === index + 1 ? "btn-primary" : "btn-outline-primary"}`}
+                                onClick={() => handlePageChange(index + 1)}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                        <button
+                            className="btn btn-outline-primary"
+                            disabled={currentPage === totalPages}
+                            onClick={() => handlePageChange(totalPages)}
+                        >
+                            Last
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <table className="transaction-table">
-                <thead>
-                    <tr>
-                        <th>Date & Time</th>
-                        <th>Type</th>
-                        <th>From / To</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {transactions.map((transaction, index) => (
-                        <tr key={index}>
-                            <td>{transaction.date}</td>
-                            <td>{transaction.type}</td>
-                            <td>{transaction.fromTo}</td>
-                            <td>{transaction.description}</td>
-                            <td className={transaction.amount.startsWith("+") ? "positive" : "negative"}>
-                                {transaction.amount}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <div className="pagination">
-                <button className="pagination-btn">First</button>
-                <button className="pagination-btn">1</button>
-                <button className="pagination-btn active">2</button>
-                <button className="pagination-btn">3</button>
-                <button className="pagination-btn">Next</button>
-            </div>
-        </div>
+            ) : getTransactionLoading ? (
+                <div className="spinner-border text-primary" role="status">
+                    <span className="sr-only"></span>
+                </div>
+            ) : (
+                <div className="spinner-border text-primary" role="status">
+                    <span className="sr-only"></span>
+                </div>
+            )}
+        </>
     );
 }
 

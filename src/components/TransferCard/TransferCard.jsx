@@ -1,0 +1,45 @@
+import React from "react";
+
+function TransferCard() {
+    return (
+        <div className="card shadow-sm p-4">
+            <div className="card-body">
+                {/* To Section */}
+                <div className="d-flex flex-row gap-2 align-items-center justify-content-center mb-4">
+                    <label className="d-flex form-label fw-bold bg-body-secondary p-3 rounded-2 justify-content-center flex-nowrap" style={{ width: "20%" }}>To</label>
+                    <select className="form-select">
+                        <option value="900782139">900782139 (Giz)</option>
+                        <option value="900782140">900782140 (John)</option>
+                        <option value="900782141">900782141 (Doe)</option>
+                    </select>
+                </div>
+
+                {/* Amount Section */}
+                <div className="mb-4">
+                    <label className="form-label fw-bold">Amount</label>
+                    <input
+                        type="number"
+                        className="form-control fs-1"
+                        placeholder="IDR 150.000,00"
+                    />
+                    <small className="text-muted">Balance: <span className="text-success fw-bold">IDR 10.000.000</span></small>
+                </div>
+
+                {/* Notes Section */}
+                <div className="mb-4">
+                    <label className="form-label fw-bold">Notes</label>
+                    <textarea
+                        className="form-control"
+                        rows="3"
+                        placeholder="Add a note (optional)"
+                    ></textarea>
+                </div>
+
+                {/* Transfer Button */}
+                <button className="btn btn-primary w-100 fw-bold">Transfer</button>
+            </div>
+        </div>
+    );
+}
+
+export default TransferCard;
