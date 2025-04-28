@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import Logo from "../../assets/Logo.png";
+import { useNavigate } from "react-router-dom";
 
 function Navbar({ children }) {
     const navbarRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const navbarHeight = navbarRef.current.offsetHeight;
@@ -11,6 +13,12 @@ function Navbar({ children }) {
             contentContainer.style.paddingTop = `${navbarHeight}px`;
         }
     }, []);
+
+    const handleSignOut = () => {
+        localStorage.removeItem("user-token");
+
+        navigate("/login");
+    };
 
     return (
         <>
@@ -42,7 +50,13 @@ function Navbar({ children }) {
                                 <a className="nav-link fw-semibold" href="#topup">Topup</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link fw-semibold" href="#signout">Sign Out</a>
+                                <a
+                                    className="nav-link fw-semibold"
+                                    onClick={handleSignOut}
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    Sign Out
+                                </a>
                             </li>
                         </ul>
                         <button className="btn btn-light ms-3">
