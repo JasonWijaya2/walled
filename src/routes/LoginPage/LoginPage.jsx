@@ -3,7 +3,7 @@ import AxiosInstance from "../../helpers/axiosInstance";
 import { useNavigate } from "react-router-dom"; // To navigate after successful login
 import axios from "axios"; // Use axios to make the request to json-server
 
-const LoginPage = () => {
+const LoginPage = ({ onLoginSuccess }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -26,10 +26,13 @@ const LoginPage = () => {
 
             if (response.data.length > 0) {
                 // User found, store token (or just store username if token is not in use)
+                if (onLoginSuccess) {
+                    onLoginSuccess();
+                }
                 localStorage.setItem("user-token", JSON.stringify({ token: "some-token" }));
                 navigate("/dashboard"); // Redirect to the dashboard page after login
             } else {
-                setError("Invalid credentials");
+                setError("Username or Password is wrong!");
             }
         } catch (err) {
             setError("Login failed. Please try again.", err);

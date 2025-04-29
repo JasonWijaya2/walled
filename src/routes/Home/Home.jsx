@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Navbar, Persona, Table, Wallet } from "../../components";
 import useAxios from "../../helpers/useAxios";
 
@@ -11,13 +10,6 @@ function Home() {
             },
             { manual: false }
         );
-
-    useEffect(() => {
-        if (getUserData) {
-            console.log(getUserData);
-
-        }
-    }, [getUserData])
 
     return (
         <div className="bg-white">

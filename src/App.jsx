@@ -1,29 +1,34 @@
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { useState } from "react";
+import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Navbar } from "./components";
 import Home from "./routes/Home/Home";
 import Transfer from "./routes/Transfer/Transfer";
 import { LoginPage } from "./routes";
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 function App() {
-  const isAuthenticated = localStorage.getItem("user-token");
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("user-token"));
+
   return (
     <HashRouter>
       <Routes>
-        {/* Public Route - Login Page */}
-        <Route path="/login" element={<LoginPage />} />
-
-        {/* Protected Routes */}
+        <Route
+          path="/"
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage onLoginSuccess={() => setIsAuthenticated(true)} />}
+        />
         <Route
           path="/dashboard"
           element={
             isAuthenticated ? (
               <>
-                <Navbar /> {/* Render Navbar only if authenticated */}
+                <Navbar onSignOut={() => setIsAuthenticated(false)} />
                 <Home />
               </>
             ) : (
-              <LoginPage /> // If not authenticated, show login page
+              <Navigate to="/login" />
             )
           }
         />
@@ -32,15 +37,14 @@ function App() {
           element={
             isAuthenticated ? (
               <>
-                <Navbar /> {/* Render Navbar only if authenticated */}
+                <Navbar onSignOut={() => setIsAuthenticated(false)} />
                 <Transfer />
               </>
             ) : (
-              <LoginPage /> // If not authenticated, show login page
+              <Navigate to="/login" />
             )
           }
         />
-        {/* Add more protected routes as needed */}
       </Routes>
     </HashRouter>
   );

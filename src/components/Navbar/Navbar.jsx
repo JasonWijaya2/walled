@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Logo from "../../assets/Logo.png";
 import { useNavigate } from "react-router-dom";
 
-function Navbar({ children }) {
+function Navbar({ children, onSignOut }) {
     const navbarRef = useRef(null);
     const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ function Navbar({ children }) {
 
     const handleSignOut = () => {
         localStorage.removeItem("user-token");
-
+        onSignOut();
         navigate("/login");
     };
 

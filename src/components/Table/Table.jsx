@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useAxios from "../../helpers/useAxios";
 
 function Table() {
@@ -11,25 +11,27 @@ function Table() {
     const itemsPerPage = 10;
 
     const buildQueryString = () => {
-        let query = `?_limit=${itemsCount}`;
-
-        if (searchTerm) {
-            query += `&q=${encodeURIComponent(searchTerm)}`;
-        }
+        const params = [];
 
         if (filterType && filterType !== "All") {
-            query += `&type=${filterType}`;
+            params.push(`type=${filterType}`);
         }
 
         if (sortBy) {
-            query += `&_sort=${sortBy}&_order=${sortDir}`;
+            params.push(`_sort=${sortBy}`, `_order=${sortDir}`);
         }
 
-        console.log(query);
+        if (itemsCount) {
+            params.push(`_limit=${itemsCount}`);
+        }
 
+        if (params.length > 0) {
+            return `?${params.join('&')}`;
+        }
 
-        return query;
+        return '';
     };
+
 
     const [{ loading: getTransactionLoading, data: getTransactionData }] =
         useAxios(
@@ -40,17 +42,19 @@ function Table() {
             { manual: false }
         );
 
+    // Filter berdasarkan search term
+    const filteredTransactions = getTransactionData?.filter(transaction =>
+        transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        transaction.to.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-    useEffect(() => {
-        console.log(getTransactionLoading);
-
-    })
     // Pagination logic
-    const totalPages = Math.ceil(getTransactionData?.length / itemsPerPage);
-    const paginatedTransactions = getTransactionData?.slice(
+    const totalPages = Math.ceil((filteredTransactions?.length || 0) / itemsPerPage);
+    const paginatedTransactions = filteredTransactions?.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
 
     // Search logic
     const handleSearch = (e) => {
